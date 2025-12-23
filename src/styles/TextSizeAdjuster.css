@@ -1,0 +1,63 @@
+/* Text Size Adjuster */
+.text-size-adjuster {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.text-size-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.text-size-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--bg-tertiary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+}
+
+.text-size-btn {
+    background: none;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    font-weight: bold;
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+    line-height: 1;
+    min-width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-size-btn:hover:not(:disabled) {
+    background-color: var(--bg-secondary);
+    color: var(--primary-color);
+}
+
+.text-size-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.text-size-display {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    min-width: 2.5rem;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .text-size-label {
+        display: none;
+    }
+}
