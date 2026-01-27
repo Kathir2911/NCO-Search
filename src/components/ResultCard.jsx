@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useRole } from '../context/RoleContext';
 import ConfidenceBar from './ConfidenceBar';
@@ -5,15 +6,65 @@ import { logSelection, logOverride } from '../services/api';
 
 export default function ResultCard({ result, onAction }) {
     const { hasPermission, isPublic } = useRole();
+    const [isOverriding, setIsOverriding] = useState(false);
+    const [isSelecting, setIsSelecting] = useState(false);
 
     const handleSelect = async () => {
-        await logSelection(result.ncoCode, result.title);
-        if (onAction) onAction('select', result);
+        // Show confirmation dialog
+        const confirmed = window.confirm(
+            `Are you sure you want to select this occupation?\n\n${result.title} (${result.ncoCode})`
+        );
+
+        if (!confirmed) {
+            return; // User cancelled
+        }
+
+        setIsSelecting(true);
+
+        try {
+            // Log the selection
+            await logSelection(result.ncoCode, result.title);
+
+            // Show success message
+            alert(`✓ Selection successful!\n\nOccupation: ${result.title}\nNCO Code: ${result.ncoCode}`);
+
+            // Notify parent component
+            if (onAction) onAction('select', result);
+        } catch (error) {
+            alert('❌ Selection failed. Please try again.');
+            console.error('Selection error:', error);
+        } finally {
+            setIsSelecting(false);
+        }
     };
 
     const handleOverride = async () => {
-        await logOverride('previous_code', result.ncoCode);
-        if (onAction) onAction('override', result);
+        // Show confirmation dialog
+        const confirmed = window.confirm(
+            `Are you sure you want to override the selection to:\n\n${result.title} (${result.ncoCode})?`
+        );
+
+        if (!confirmed) {
+            return; // User cancelled
+        }
+
+        setIsOverriding(true);
+
+        try {
+            // Log the override action
+            await logOverride('AUTO_SELECTED', result.ncoCode);
+
+            // Show success message
+            alert(`✓ Override successful!\n\nOccupation: ${result.title}\nNCO Code: ${result.ncoCode}`);
+
+            // Notify parent component
+            if (onAction) onAction('override', result);
+        } catch (error) {
+            alert('❌ Override failed. Please try again.');
+            console.error('Override error:', error);
+        } finally {
+            setIsOverriding(false);
+        }
     };
 
     return (
@@ -64,9 +115,10 @@ export default function ResultCard({ result, onAction }) {
                 {hasPermission('select') && (
                     <button
                         onClick={handleSelect}
+                        disabled={isSelecting}
                         className="btn btn-primary action-btn"
                     >
-                        ✓ Select
+                        {isSelecting ? '⏳ Selecting...' : '✓ Select'}
                     </button>
                 )}
 
@@ -74,9 +126,10 @@ export default function ResultCard({ result, onAction }) {
                 {hasPermission('override') && (
                     <button
                         onClick={handleOverride}
+                        disabled={isOverriding}
                         className="btn btn-purple action-btn"
                     >
-                        ⚡ Override
+                        {isOverriding ? '⏳ Overriding...' : '⚡ Override'}
                     </button>
                 )}
             </div>

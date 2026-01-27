@@ -28,7 +28,13 @@ export default function SearchPage() {
     };
 
     const handleResultAction = (action, result) => {
-        console.log(`${action} action for:`, result.ncoCode);
+        if (action === 'override') {
+            console.log(`✓ Admin Override: ${result.title} (${result.ncoCode})`);
+        } else if (action === 'select') {
+            console.log(`✓ Selected: ${result.title} (${result.ncoCode})`);
+        } else {
+            console.log(`${action} action for:`, result.ncoCode);
+        }
     };
 
     return (

@@ -108,7 +108,7 @@ export default function DemoSearch() {
                                             {/* View Details Link */}
                                             <div style={{ paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)' }}>
                                                 <Link
-                                                    to={`/occupation/${result.ncoCode}`}
+                                                    to={`/demo/occupation/${result.ncoCode}`}
                                                     className="text-sm font-medium"
                                                     style={{ color: '#2563eb', textDecoration: 'none' }}
                                                 >

@@ -1,16 +1,31 @@
 /* CSS Variables for Theming */
 :root {
-  --bg-primary: #f9fafb;
+  /* Blue-themed color palette */
+  --bg-primary: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  --bg-primary-solid: #e3f2fd;
   --bg-secondary: #ffffff;
-  --bg-tertiary: #f3f4f6;
-  --text-primary: #111827;
-  --text-secondary: #4b5563;
-  --text-tertiary: #6b7280;
-  --border-color: #e5e7eb;
-  --border-color-hover: #d1d5db;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --bg-tertiary: #bbdefb;
+  --bg-accent: #1976d2;
+  --bg-accent-light: #42a5f5;
+  --bg-accent-dark: #1565c0;
+
+  /* Text colors for blue theme */
+  --text-primary: #0d47a1;
+  --text-secondary: #1565c0;
+  --text-tertiary: #1976d2;
+
+  /* Border colors */
+  --border-color: #90caf9;
+  --border-color-hover: #64b5f6;
+
+  /* Shadows with blue tint */
+  --shadow-sm: 0 1px 2px 0 rgba(25, 118, 210, 0.15);
+  --shadow-md: 0 2px 8px 0 rgba(25, 118, 210, 0.2);
+  --shadow-lg: 0 8px 16px -2px rgba(25, 118, 210, 0.25);
+
+  /* Accent colors */
+  --accent-orange: #ff9800;
+  --accent-yellow: #ffc107;
 }
 
 [data-theme="dark"] {
@@ -40,10 +55,34 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--bg-primary);
+  background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.3s ease;
+  min-height: 100vh;
+  font-weight: 500;
+}
+
+[data-theme="light"] body {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #e3f2fd 100%);
+  background-attachment: fixed;
+  font-weight: 600;
+}
+
+/* Enhanced text visibility for light theme */
+[data-theme="light"] p,
+[data-theme="light"] span,
+[data-theme="light"] div {
+  font-weight: inherit;
+}
+
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4,
+[data-theme="light"] h5,
+[data-theme="light"] h6 {
+  font-weight: 700;
 }
 
 /* Transliterate Container */
@@ -116,7 +155,7 @@ body {
   display: inline-block;
   padding: 0.5rem 1rem;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   text-align: center;
   text-decoration: none;
   border: none;
@@ -131,40 +170,51 @@ body {
 }
 
 .btn-primary {
-  background-color: #2563eb;
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+  border: none;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: #1d4ed8;
+  background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
   background-color: var(--bg-tertiary);
   color: var(--text-primary);
+  border: 1px solid var(--border-color);
 }
 
 .btn-secondary:hover:not(:disabled) {
   background-color: var(--border-color-hover);
+  border-color: var(--border-color-hover);
 }
 
 .btn-purple {
-  background-color: #7c3aed;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
 }
 
 .btn-purple:hover:not(:disabled) {
-  background-color: #6d28d9;
+  background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+  transform: translateY(-1px);
 }
 
 .btn-outline {
-  background-color: var(--bg-secondary);
-  color: #2563eb;
-  border: 2px solid #2563eb;
+  background-color: transparent;
+  color: var(--bg-accent);
+  border: 2px solid var(--bg-accent);
 }
 
 .btn-outline:hover:not(:disabled) {
-  background-color: #eff6ff;
+  background-color: var(--bg-accent);
+  color: white;
+  transform: translateY(-1px);
 }
 
 .btn-icon {
@@ -187,16 +237,23 @@ body {
 /* Cards */
 .card {
   background-color: var(--bg-secondary);
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   box-shadow: var(--shadow-md);
   padding: 1.5rem;
   border: 1px solid var(--border-color);
   margin-bottom: 1rem;
-  transition: background-color 0.3s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
+}
+
+[data-theme="light"] .card {
+  border: 2px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.15);
 }
 
 .card:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 8px 16px rgba(25, 118, 210, 0.25);
+  transform: translateY(-2px);
+  border-color: var(--bg-accent-light);
 }
 
 /* Form Elements */
@@ -218,8 +275,9 @@ body {
 .input-field:focus,
 .textarea-field:focus,
 .select-field:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: var(--bg-accent);
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+  outline: none;
 }
 
 .textarea-field {
@@ -229,7 +287,7 @@ body {
 .label {
   display: block;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-secondary);
   margin-bottom: 0.5rem;
 }
@@ -257,9 +315,14 @@ select.select-field option {
 /* Header */
 .header {
   background-color: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-color);
-  box-shadow: var(--shadow-sm);
-  transition: background-color 0.3s ease;
+  border-bottom: 2px solid var(--border-color);
+  box-shadow: 0 2px 12px rgba(25, 118, 210, 0.1);
+  transition: all 0.3s ease;
+}
+
+[data-theme="light"] .header {
+  background: linear-gradient(to bottom, #ffffff 0%, #f5f9ff 100%);
+  border-bottom: 2px solid var(--bg-accent-light);
 }
 
 .header-content {
@@ -282,7 +345,7 @@ select.select-field option {
 .header-logo {
   width: 2.5rem;
   height: 2.5rem;
-  background-color: #2563eb;
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
@@ -292,13 +355,14 @@ select.select-field option {
   font-size: 1.25rem;
   padding: 0.5rem;
   margin-right: 0.25rem;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
 }
 
 .header-title {
   font-size: 1.875rem;
   /* 30px - larger, more prominent */
-  font-weight: 600;
-  /* Semi-bold for modern look */
+  font-weight: 700;
+  /* Bold for better visibility */
   color: var(--text-primary);
   margin: 0;
   letter-spacing: -0.025em;
@@ -312,7 +376,7 @@ select.select-field option {
   color: var(--text-tertiary);
   margin: 0;
   margin-top: 0.125rem;
-  font-weight: 400;
+  font-weight: 600;
   letter-spacing: 0.01em;
 }
 
@@ -378,7 +442,7 @@ select.select-field option {
   border-radius: 0.375rem;
   color: var(--text-secondary);
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
@@ -391,9 +455,9 @@ select.select-field option {
 }
 
 .role-nav-item.active {
-  background-color: #2563eb;
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
   color: white;
-  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.4);
 }
 
 .role-icon {
@@ -401,7 +465,7 @@ select.select-field option {
 }
 
 .role-name {
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .role-badge {
@@ -412,13 +476,17 @@ select.select-field option {
 }
 
 .role-badge-enumerator {
-  background-color: #dbeafe;
-  color: #1e40af;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #0d47a1;
+  border: 1px solid #90caf9;
+  font-weight: 600;
 }
 
 .role-badge-admin {
-  background-color: #f3e8ff;
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
   color: #6b21a8;
+  border: 1px solid #d8b4fe;
+  font-weight: 600;
 }
 
 .role-badge-public {
@@ -447,11 +515,13 @@ select.select-field option {
   text-decoration: none;
   border-radius: 0.25rem;
   transition: all 0.2s;
+  font-weight: 600;
 }
 
 .nav-link:hover {
-  color: #2563eb;
-  background-color: var(--bg-tertiary);
+  color: var(--bg-accent);
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  transform: translateY(-1px);
 }
 
 /* Admin Navigation Bar */
@@ -471,7 +541,7 @@ select.select-field option {
   gap: 0.5rem;
   padding: 0.625rem 1rem;
   font-size: 0.9375rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-secondary);
   text-decoration: none;
   border-radius: 0.375rem;
@@ -480,8 +550,9 @@ select.select-field option {
 }
 
 .admin-nav .nav-link:hover {
-  color: var(--primary-color);
-  background-color: var(--bg-tertiary);
+  color: var(--bg-accent);
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  transform: translateY(-1px);
 }
 
 .admin-nav .nav-icon {
@@ -527,15 +598,22 @@ select.select-field option {
 .result-card {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   padding: 1.5rem;
   margin-bottom: 1rem;
   box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s, background-color 0.3s;
+  transition: all 0.3s ease;
+}
+
+[data-theme="light"] .result-card {
+  border: 2px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.15);
 }
 
 .result-card:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 8px 16px rgba(25, 118, 210, 0.25);
+  transform: translateY(-2px);
+  border-color: var(--bg-accent-light);
 }
 
 .result-header {
@@ -544,7 +622,7 @@ select.select-field option {
 
 .result-title {
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.25rem;
 }
@@ -552,8 +630,12 @@ select.select-field option {
 .result-code {
   font-size: 0.875rem;
   font-family: 'Courier New', monospace;
-  color: #2563eb;
-  font-weight: 500;
+  color: var(--bg-accent);
+  font-weight: 700;
+  background: var(--bg-tertiary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  display: inline-block;
 }
 
 /* Hierarchy */
@@ -570,6 +652,7 @@ select.select-field option {
   background-color: var(--bg-tertiary);
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
+  font-weight: 600;
 }
 
 .hierarchy-separator {
@@ -589,13 +672,13 @@ select.select-field option {
 
 .confidence-label {
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-secondary);
 }
 
 .confidence-value {
   font-size: 0.75rem;
-  font-weight: bold;
+  font-weight: 700;
   color: var(--text-primary);
 }
 
@@ -613,22 +696,25 @@ select.select-field option {
 }
 
 .confidence-high {
-  background-color: #10b981;
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
 }
 
 .confidence-medium {
-  background-color: #f59e0b;
+  background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
 }
 
 .confidence-low {
-  background-color: #ef4444;
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
 }
 
 /* Match Reason */
 .match-reason {
   padding: 0.75rem;
-  background-color: #eff6ff;
-  border: 1px solid #bfdbfe;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border: 2px solid var(--bg-accent-light);
   border-radius: 0.5rem;
   margin-bottom: 1rem;
 }
@@ -640,7 +726,8 @@ select.select-field option {
 
 .match-reason-text {
   font-size: 0.875rem;
-  color: #1e40af;
+  color: var(--bg-accent-dark);
+  font-weight: 600;
 }
 
 [data-theme="dark"] .match-reason-text {
@@ -686,9 +773,10 @@ select.select-field option {
 }
 
 .spinner-circle-active {
-  border: 4px solid #2563eb;
+  border: 4px solid var(--bg-accent);
   border-top-color: transparent;
   animation: spin 1s linear infinite;
+  box-shadow: 0 0 12px rgba(25, 118, 210, 0.4);
 }
 
 @keyframes spin {
@@ -714,7 +802,7 @@ select.select-field option {
 
 .empty-title {
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
@@ -722,13 +810,19 @@ select.select-field option {
 .empty-message {
   color: var(--text-secondary);
   max-width: 32rem;
+  font-weight: 600;
 }
 
 /* Page Layout */
 .page {
   min-height: 100vh;
-  background-color: var(--bg-primary);
+  background: var(--bg-primary);
   padding: 2rem 0;
+}
+
+[data-theme="light"] .page {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #e3f2fd 100%);
+  background-attachment: fixed;
 }
 
 .page-container {
@@ -753,7 +847,7 @@ select.select-field option {
 
 .stat-value {
   font-size: 2rem;
-  font-weight: bold;
+  font-weight: 700;
   color: var(--text-primary);
 }
 
@@ -761,6 +855,7 @@ select.select-field option {
   font-size: 0.875rem;
   color: var(--text-tertiary);
   margin-bottom: 0.25rem;
+  font-weight: 600;
 }
 
 .stat-icon {
@@ -785,7 +880,7 @@ select.select-field option {
   padding: 0.75rem 1.5rem;
   text-align: left;
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 700;
   color: var(--text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -795,6 +890,7 @@ select.select-field option {
 .table td {
   padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border-color);
+  font-weight: 600;
 }
 
 .table tbody tr:hover {
@@ -806,33 +902,43 @@ select.select-field option {
   display: inline-block;
   padding: 0.25rem 0.5rem;
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 700;
   border-radius: 9999px;
 }
 
 .badge-blue {
-  background-color: #dbeafe;
-  color: #1e40af;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #0d47a1;
+  border: 1px solid var(--border-color);
+  font-weight: 600;
 }
 
 .badge-green {
-  background-color: #d1fae5;
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
   color: #065f46;
+  border: 1px solid #6ee7b7;
+  font-weight: 600;
 }
 
 .badge-purple {
-  background-color: #f3e8ff;
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
   color: #6b21a8;
+  border: 1px solid #d8b4fe;
+  font-weight: 600;
 }
 
 .badge-yellow {
-  background-color: #fef3c7;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
   color: #92400e;
+  border: 1px solid #fcd34d;
+  font-weight: 600;
 }
 
 .badge-red {
-  background-color: #fee2e2;
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
   color: #991b1b;
+  border: 1px solid #fca5a5;
+  font-weight: 600;
 }
 
 .badge-gray {
@@ -981,7 +1087,8 @@ select.select-field option {
 }
 
 .text-blue-600 {
-  color: #2563eb;
+  color: var(--bg-accent);
+  font-weight: 600;
 }
 
 .text-red-600 {
