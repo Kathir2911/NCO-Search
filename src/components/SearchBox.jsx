@@ -1,6 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { ReactTransliterate } from 'react-transliterate';
-import 'react-transliterate/dist/index.css';
 import CustomDropdown from './CustomDropdown';
 
 
@@ -132,59 +130,23 @@ export default function SearchBox({ onSearch, loading }) {
 
     return (
         <form onSubmit={handleSubmit} className="search-box">
-            {/* Multiline text input with transliteration */}
+            {/* Multiline text input */}
             <div className="mb-4">
                 <label htmlFor="search-query" className="label">
                     Enter job title or description
                 </label>
-                {language === 'en' ? (
-                    <textarea
-                        id="search-query"
-                        rows="4"
-                        className="textarea-field"
-                        placeholder="Example: Sewing machine operator in garment factory&#10;&#10;Describe the occupation in detail for better results..."
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        disabled={loading}
-                    />
-                ) : (
-                    <ReactTransliterate
-                        value={query}
-                        onChangeText={setQuery}
-                        lang={getLanguageCode()}
-                        containerClassName="transliterate-container"
-                        activeItemStyles={{
-                            backgroundColor: '#2563eb',
-                            color: 'white'
-                        }}
-                        suggestionListStyles={{
-                            backgroundColor: '#1f2937',
-                            border: '1px solid #374151',
-                            borderRadius: '0.5rem',
-                            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
-                        }}
-                        suggestionItemStyles={{
-                            backgroundColor: '#1f2937',
-                            color: '#f9fafb',
-                            padding: '0.5rem 1rem',
-                            cursor: 'pointer',
-                            borderBottom: '1px solid #374151'
-                        }}
-                        renderComponent={(props) => (
-                            <textarea
-                                {...props}
-                                id="search-query"
-                                rows="4"
-                                className="textarea-field"
-                                placeholder={getPlaceholder()}
-                                disabled={loading}
-                            />
-                        )}
-                    />
-                )}
+                <textarea
+                    id="search-query"
+                    rows="4"
+                    className="textarea-field"
+                    placeholder={getPlaceholder()}
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    disabled={loading}
+                />
                 {language !== 'en' && (
                     <p className="text-sm" style={{ color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>
-                        💡 Type in English characters to get suggestions in {getLanguageName()}. Press Space to select.
+                        💡 Use your system keyboard to type in {getLanguageName()}, or use voice input below.
                     </p>
                 )}
                 {voiceError && (
