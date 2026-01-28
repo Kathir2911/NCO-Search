@@ -26,6 +26,11 @@ export default function Header() {
         }
     };
 
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
+
     const getRoleButtonClass = (role) => {
         const baseClass = 'role-nav-item';
 
@@ -121,7 +126,7 @@ export default function Header() {
                                 <p style={{ fontSize: '0.875rem', fontWeight: '700', color: '#FFFFFF', margin: 0 }}>{user.name}</p>
                                 <p style={{ fontSize: '0.75rem', opacity: 0.8, color: '#FFFFFF', margin: 0 }}>{user.role.toLowerCase()}</p>
                             </div>
-                            <button onClick={logout} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#FFFFFF', border: '1px solid rgba(255,255,255,0.2)' }}>
+                            <button onClick={handleLogout} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#FFFFFF', border: '1px solid rgba(255,255,255,0.2)' }}>
                                 Logout
                             </button>
                         </div>
@@ -150,12 +155,16 @@ export default function Header() {
                     {/* Enumerator Navigation */}
                     {currentRole === ROLES.ENUMERATOR && (
                         <>
-                            <Link to="/enumerator" className="nav-link">
-                                Search
-                            </Link>
-                            <Link to="/saved-searches" className="nav-link">
-                                Saved Searches
-                            </Link>
+                            {isAuthenticated && (
+                                <>
+                                    <Link to="/enumerator" className="nav-link">
+                                        Search
+                                    </Link>
+                                    <Link to="/saved-searches" className="nav-link">
+                                        Saved Searches
+                                    </Link>
+                                </>
+                            )}
                             <Link to="/guidelines" className="nav-link">
                                 Guidelines / Help
                             </Link>
@@ -168,15 +177,19 @@ export default function Header() {
                     {/* Admin Navigation */}
                     {currentRole === ROLES.ADMIN && (
                         <>
-                            <Link to="/admin/search" className="nav-link">
-                                Search
-                            </Link>
-                            <Link to="/admin/synonyms" className="nav-link">
-                                Synonyms
-                            </Link>
-                            <Link to="/admin/audit-logs" className="nav-link">
-                                Audit Logs
-                            </Link>
+                            {isAuthenticated && (
+                                <>
+                                    <Link to="/admin/search" className="nav-link">
+                                        Search
+                                    </Link>
+                                    <Link to="/admin/synonyms" className="nav-link">
+                                        Synonyms
+                                    </Link>
+                                    <Link to="/admin/audit-logs" className="nav-link">
+                                        Audit Logs
+                                    </Link>
+                                </>
+                            )}
                             <Link to="/about" className="nav-link">
                                 About Us
                             </Link>

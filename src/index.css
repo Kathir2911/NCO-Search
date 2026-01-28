@@ -332,9 +332,7 @@ select.select-field option {
 }
 
 .header-content {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 1rem;
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -568,9 +566,7 @@ select.select-field option {
 /* Admin Navigation Bar */
 .admin-nav {
   border-top: 1px solid var(--border-color);
-  padding: 0.75rem 1rem;
-  max-width: 1280px;
-  margin: 0 auto;
+  padding: 0.75rem 2rem;
   display: flex;
   gap: 1.5rem;
   align-items: center;
