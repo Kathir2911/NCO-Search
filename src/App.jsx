@@ -9,7 +9,7 @@ import OccupationDetail from './pages/OccupationDetail';
 import Dashboard from './pages/admin/Dashboard';
 import Synonyms from './pages/admin/Synonyms';
 import AuditLogs from './pages/admin/AuditLogs';
-import RoleGuard from './components/RoleGuard';
+import ProtectedRoute from './components/ProtectedRoute';
 import DemoSearch from './pages/demo/DemoSearch';
 import DemoDetail from './pages/demo/DemoDetail';
 import AboutUs from './pages/AboutUs';
@@ -46,40 +46,48 @@ function App() {
               <Route path="/demo/occupation/:ncoCode" element={<DemoDetail />} />
 
               {/* Enumerator Routes */}
-              <Route path="/enumerator" element={<SearchPage />} />
-              <Route path="/enumerator/occupation/:ncoCode" element={<OccupationDetail />} />
+              <Route path="/enumerator" element={
+                <ProtectedRoute roles={['ENUMERATOR']}>
+                  <SearchPage />
+                </ProtectedRoute>
+              } />
+              <Route path="/enumerator/occupation/:ncoCode" element={
+                <ProtectedRoute roles={['ENUMERATOR']}>
+                  <OccupationDetail />
+                </ProtectedRoute>
+              } />
 
               {/* Admin Routes */}
               <Route
                 path="/admin/search"
                 element={
-                  <RoleGuard roles={['ADMIN']}>
+                  <ProtectedRoute roles={['ADMIN']}>
                     <SearchPage />
-                  </RoleGuard>
+                  </ProtectedRoute>
                 }
               />
               <Route
                 path="/admin/dashboard"
                 element={
-                  <RoleGuard roles={['ADMIN']}>
+                  <ProtectedRoute roles={['ADMIN']}>
                     <Dashboard />
-                  </RoleGuard>
+                  </ProtectedRoute>
                 }
               />
               <Route
                 path="/admin/synonyms"
                 element={
-                  <RoleGuard roles={['ADMIN']}>
+                  <ProtectedRoute roles={['ADMIN']}>
                     <Synonyms />
-                  </RoleGuard>
+                  </ProtectedRoute>
                 }
               />
               <Route
                 path="/admin/audit-logs"
                 element={
-                  <RoleGuard roles={['ADMIN']}>
+                  <ProtectedRoute roles={['ADMIN']}>
                     <AuditLogs />
-                  </RoleGuard>
+                  </ProtectedRoute>
                 }
               />
             </Routes>

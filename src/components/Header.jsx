@@ -5,7 +5,7 @@ import RoleGuard from './RoleGuard';
 import TextSizeAdjuster from './TextSizeAdjuster';
 
 export default function Header() {
-    const { currentRole, switchRole } = useRole();
+    const { user, currentRole, isAuthenticated, logout, switchRole } = useRole();
     const { theme, toggleTheme } = useTheme();
     const navigate = useNavigate();
     const location = useLocation();
@@ -63,32 +63,34 @@ export default function Header() {
 
                 {/* Right side - Role selector and controls */}
                 <div className="header-right">
-                    {/* Role Navigation Bar */}
-                    <div className="role-navigation">
-                        <button
-                            onClick={() => handleRoleSwitch(ROLES.ENUMERATOR)}
-                            className={getRoleButtonClass(ROLES.ENUMERATOR)}
-                            title="Switch to Enumerator Mode"
-                        >
-                            <span className="role-name">Enumerator</span>
-                        </button>
+                    {/* Role Navigation Bar - Hide when authenticated */}
+                    {!isAuthenticated && (
+                        <div className="role-navigation">
+                            <button
+                                onClick={() => handleRoleSwitch(ROLES.ENUMERATOR)}
+                                className={getRoleButtonClass(ROLES.ENUMERATOR)}
+                                title="Switch to Enumerator Mode"
+                            >
+                                <span className="role-name">Enumerator</span>
+                            </button>
 
-                        <button
-                            onClick={() => handleRoleSwitch(ROLES.PUBLIC)}
-                            className={getRoleButtonClass(ROLES.PUBLIC)}
-                            title="Switch to Public Demo Mode"
-                        >
-                            <span className="role-name">Public Demo</span>
-                        </button>
+                            <button
+                                onClick={() => handleRoleSwitch(ROLES.PUBLIC)}
+                                className={getRoleButtonClass(ROLES.PUBLIC)}
+                                title="Switch to Public Demo Mode"
+                            >
+                                <span className="role-name">Public Demo</span>
+                            </button>
 
-                        <button
-                            onClick={() => handleRoleSwitch(ROLES.ADMIN)}
-                            className={getRoleButtonClass(ROLES.ADMIN)}
-                            title="Switch to Admin Mode"
-                        >
-                            <span className="role-name">Admin</span>
-                        </button>
-                    </div>
+                            <button
+                                onClick={() => handleRoleSwitch(ROLES.ADMIN)}
+                                className={getRoleButtonClass(ROLES.ADMIN)}
+                                title="Switch to Admin Mode"
+                            >
+                                <span className="role-name">Admin</span>
+                            </button>
+                        </div>
+                    )}
 
                     {/* Text Size Adjuster */}
                     <TextSizeAdjuster />
@@ -112,12 +114,18 @@ export default function Header() {
                         </svg>
                     </button>
 
-                    {/* Admin Dashboard Link */}
-                    <RoleGuard roles={['ADMIN']}>
-                        <Link to="/admin/dashboard" className="btn btn-primary">
-                            Dashboard
-                        </Link>
-                    </RoleGuard>
+                    {/* Auth Section - Only show Logout when authenticated */}
+                    {isAuthenticated && (
+                        <div className="auth-profile" style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginLeft: '0.5rem' }}>
+                            <div className="user-info" style={{ textAlign: 'right', display: 'none', md: 'block' }}>
+                                <p style={{ fontSize: '0.875rem', fontWeight: '700', color: '#FFFFFF', margin: 0 }}>{user.name}</p>
+                                <p style={{ fontSize: '0.75rem', opacity: 0.8, color: '#FFFFFF', margin: 0 }}>{user.role.toLowerCase()}</p>
+                            </div>
+                            <button onClick={logout} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#FFFFFF', border: '1px solid rgba(255,255,255,0.2)' }}>
+                                Logout
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
 

@@ -194,13 +194,70 @@ export async function logOverride(fromCode, toCode) {
     // await axios.post(`${API_BASE_URL}/overrides`, { fromCode, toCode });
 }
 
+/**
+ * Authentication Services
+ */
+
+// Mock database for users
+const mockUsers = {
+    enumerator: { phone: '9876543210', role: 'ENUMERATOR', name: 'Field Agent 1' },
+    admin: { username: 'admin', password: 'password', role: 'ADMIN', name: 'System Admin' }
+};
+
+export async function requestOTP(phone) {
+    await delay(1000);
+    console.log(`[Twilio Mock] Sending OTP to ${phone}: 123456`);
+    return true; // Always return success in mock
+}
+
+export async function verifyOTP(phone, otp) {
+    await delay(800);
+    if (otp === '123456') {
+        const user = Object.values(mockUsers).find(u => u.phone === phone) || {
+            phone,
+            role: 'ENUMERATOR',
+            name: 'New Enumerator'
+        };
+        return { ...user, token: 'mock-jwt-token-enumerator' };
+    }
+    throw new Error('Invalid OTP');
+}
+
+export async function loginAdmin(username, password) {
+    await delay(800);
+    const user = mockUsers[username];
+    if (user && user.password === password) {
+        console.log(`[MFA Mock] Verification code for ${username}: 654321`);
+        return true; // Move to MFA step
+    }
+    throw new Error('Invalid credentials');
+}
+
+export async function verifyAdminOTP(username, otp) {
+    await delay(800);
+    if (otp === '654321') {
+        const user = mockUsers[username];
+        const { password, ...userWithoutPassword } = user;
+        return { ...userWithoutPassword, token: 'mock-jwt-token-admin' };
+    }
+    throw new Error('Invalid verification code');
+}
+
+export async function logout() {
+    await delay(300);
+    return true;
+}
+
 // Helper function to add audit logs (frontend only)
 function addAuditLog(action, details) {
+    const savedUser = localStorage.getItem('nco-user');
+    const userObj = savedUser ? JSON.parse(savedUser) : null;
+
     const log = {
         id: Date.now(),
         timestamp: new Date().toISOString(),
         action,
-        user: 'current_user', // In real app, this would come from auth context
+        user: userObj ? userObj.name : 'Public User',
         details,
     };
 

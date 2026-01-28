@@ -9,35 +9,73 @@ export const ROLES = {
 };
 
 export function RoleProvider({ children }) {
-    const [currentRole, setCurrentRole] = useState(() => {
-        // Check localStorage for saved role
-        const savedRole = localStorage.getItem('nco-current-role');
+    const [user, setUser] = useState(() => {
+        const savedUser = localStorage.getItem('nco-user');
+        return savedUser ? JSON.parse(savedUser) : null;
+    });
 
-        // Default to PUBLIC (since it's now the home page)
+    const [currentRole, setCurrentRole] = useState(() => {
+        const savedRole = localStorage.getItem('nco-current-role');
         return savedRole || ROLES.PUBLIC;
     });
 
-    // Save role to localStorage when it changes
+    // Synchronize currentRole with user object if available
     useEffect(() => {
-        localStorage.setItem('nco-current-role', currentRole);
-    }, [currentRole]);
+        if (user) {
+            setCurrentRole(user.role);
+            localStorage.setItem('nco-current-role', user.role);
+        }
+    }, [user]);
+
+    const login = (userData) => {
+        setUser(userData);
+        localStorage.setItem('nco-user', JSON.stringify(userData));
+    };
+
+    const logout = () => {
+        setUser(null);
+        setCurrentRole(ROLES.PUBLIC);
+        localStorage.removeItem('nco-user');
+        localStorage.setItem('nco-current-role', ROLES.PUBLIC);
+    };
 
     const switchRole = (role) => {
-        setCurrentRole(role);
+        // Only allow switching to PUBLIC or roles already held by user
+        if (role === ROLES.PUBLIC || (user && user.role === role)) {
+            setCurrentRole(role);
+            localStorage.setItem('nco-current-role', role);
+        } else if (!user && (role === ROLES.ENUMERATOR || role === ROLES.ADMIN)) {
+            // If not logged in and trying to switch to protected role, 
+            // the UI will handle navigation to login
+            setCurrentRole(role);
+        }
     };
 
     const hasPermission = (permission) => {
-        const permissions = {
-            [ROLES.ENUMERATOR]: ['search', 'select', 'viewDetails'],
-            [ROLES.ADMIN]: ['search', 'override', 'viewDetails', 'manageSynonyms', 'viewAuditLogs', 'viewDashboard'],
-            [ROLES.PUBLIC]: ['search', 'viewDetails'],
-        };
+        // PUBLIC role always limited
+        if (currentRole === ROLES.PUBLIC) {
+            return ['search', 'viewDetails'].includes(permission);
+        }
 
-        return permissions[currentRole]?.includes(permission) || false;
+        // ENUMERATOR role permissions
+        if (currentRole === ROLES.ENUMERATOR) {
+            return ['search', 'select', 'viewDetails', 'saveSearch'].includes(permission);
+        }
+
+        // ADMIN role permissions
+        if (currentRole === ROLES.ADMIN) {
+            return true; // Admin has all permissions
+        }
+
+        return false;
     };
 
     const value = {
+        user,
         currentRole,
+        isAuthenticated: !!user,
+        login,
+        logout,
         switchRole,
         hasPermission,
         isEnumerator: currentRole === ROLES.ENUMERATOR,
