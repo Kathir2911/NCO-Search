@@ -2,7 +2,7 @@
 
 .login-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: var(--bg-primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -13,9 +13,10 @@
     max-width: 550px;
     width: 100%;
     background-color: white;
-    border-radius: 12px;
+    border-radius: 8px;
     padding: 3rem 2.5rem;
-    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
 }
 
 /* Logo */
@@ -28,8 +29,8 @@
 .logo-badge-large {
     width: 90px;
     height: 90px;
-    background-color: #1e40af;
-    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-yellow) 100%);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -137,16 +138,15 @@
 }
 
 .btn-back {
-    background-color: #2563eb;
+    background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-yellow) 100%);
     color: white;
-    border: 2px solid #2563eb;
+    border: none;
 }
 
 .btn-back:hover {
-    background-color: #1d4ed8;
-    border-color: #1d4ed8;
+    background: linear-gradient(135deg, var(--accent-yellow) 0%, var(--accent-orange) 100%);
     transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
 }
 
 .btn-demo-alt {

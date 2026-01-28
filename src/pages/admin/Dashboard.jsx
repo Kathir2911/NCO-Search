@@ -48,7 +48,7 @@ export default function Dashboard() {
                                 {analytics?.totalSearches?.toLocaleString()}
                             </p>
                         </div>
-                        <div className="stat-icon">🔍</div>
+                        <div className="stat-icon"></div>
                     </div>
 
                     {/* Average Confidence */}
@@ -61,7 +61,7 @@ export default function Dashboard() {
                                     : 'N/A'}
                             </p>
                         </div>
-                        <div className="stat-icon">📊</div>
+                        <div className="stat-icon"></div>
                     </div>
 
                     {/* Low Confidence Cases */}
@@ -72,7 +72,7 @@ export default function Dashboard() {
                                 {analytics?.lowConfidenceCases?.toLocaleString()}
                             </p>
                         </div>
-                        <div className="stat-icon">⚠️</div>
+                        <div className="stat-icon"></div>
                     </div>
                 </div>
 
@@ -122,7 +122,6 @@ export default function Dashboard() {
                         onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'var(--shadow-md)'}
                     >
                         <div className="flex items-center gap-4">
-                            <div style={{ fontSize: '2.5rem' }}>📝</div>
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900">
                                     Manage Synonyms
@@ -142,7 +141,6 @@ export default function Dashboard() {
                         onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'var(--shadow-md)'}
                     >
                         <div className="flex items-center gap-4">
-                            <div style={{ fontSize: '2.5rem' }}>📋</div>
                             <div>
                                 <h3 className="text-lg font-semibold text-gray-900">
                                     View Audit Logs

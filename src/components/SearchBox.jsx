@@ -146,17 +146,17 @@ export default function SearchBox({ onSearch, loading }) {
                 />
                 {language !== 'en' && (
                     <p className="text-sm" style={{ color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>
-                        💡 Use your system keyboard to type in {getLanguageName()}, or use voice input below.
+                        Use your system keyboard to type in {getLanguageName()}, or use voice input below.
                     </p>
                 )}
                 {voiceError && (
                     <p className="text-sm" style={{ color: '#dc2626', marginTop: '0.5rem' }}>
-                        ⚠️ {voiceError}
+                        {voiceError}
                     </p>
                 )}
                 {isListening && (
                     <p className="text-sm" style={{ color: '#2563eb', marginTop: '0.5rem' }}>
-                        🎤 Listening... Speak now in {getLanguageName() || 'English'}
+                        Listening... Speak now in {getLanguageName() || 'English'}
                     </p>
                 )}
             </div>
@@ -176,8 +176,7 @@ export default function SearchBox({ onSearch, loading }) {
                         borderColor: '#dc2626'
                     } : {}}
                 >
-                    <span>{isListening ? '⏹️' : '🎤'}</span>
-                    <span className="text-sm">{isListening ? 'Stop Recording' : 'Voice Input'}</span>
+                    <span>{isListening ? 'Stop Recording' : 'Voice Input'}</span>
                 </button>
 
                 {/* Language selector */}
@@ -186,12 +185,12 @@ export default function SearchBox({ onSearch, loading }) {
                     onChange={handleLanguageChange}
                     disabled={loading || isListening}
                     options={[
-                        { value: 'en', label: '🌐 English' },
-                        { value: 'hi', label: '🇮🇳 हिन्दी (Hindi)' },
-                        { value: 'bn', label: '🇮🇳 বাংলা (Bengali)' },
-                        { value: 'ta', label: '🇮🇳 தமிழ் (Tamil)' },
-                        { value: 'te', label: '🇮🇳 తెలుగు (Telugu)' },
-                        { value: 'mr', label: '🇮🇳 मराठी (Marathi)' }
+                        { value: 'en', label: 'English' },
+                        { value: 'hi', label: 'हिन्दी (Hindi)' },
+                        { value: 'bn', label: 'বাংলা (Bengali)' },
+                        { value: 'ta', label: 'தமிழ் (Tamil)' },
+                        { value: 'te', label: 'తెలుగు (Telugu)' },
+                        { value: 'mr', label: 'मराठी (Marathi)' }
                     ]}
                 />
             </div>
@@ -213,7 +212,6 @@ export default function SearchBox({ onSearch, loading }) {
                         </span>
                     ) : (
                         <span className="flex items-center gap-2">
-                            <span>🔍</span>
                             <span>Search NCO Occupations</span>
                         </span>
                     )}

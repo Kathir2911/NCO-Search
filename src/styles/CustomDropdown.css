@@ -22,14 +22,14 @@
 }
 
 .custom-dropdown-button:hover:not(:disabled) {
-    border-color: #2563eb;
+    border-color: var(--bg-accent);
     background-color: var(--bg-tertiary);
 }
 
 .custom-dropdown-button:focus {
     outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    border-color: var(--bg-accent);
+    box-shadow: 0 0 0 3px rgba(9, 86, 147, 0.1);
 }
 
 .custom-dropdown-button:disabled {
@@ -98,8 +98,8 @@
 }
 
 .custom-dropdown-option.selected {
-    background-color: rgba(37, 99, 235, 0.1);
-    color: var(--primary-color);
+    background-color: rgba(9, 86, 147, 0.1);
+    color: var(--bg-accent);
     font-weight: 500;
 }
 

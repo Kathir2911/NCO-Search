@@ -53,12 +53,11 @@ export default function Header() {
             <div className="header-content">
                 {/* Logo and Title */}
                 <Link to="/" className="header-left">
-                    <div className="header-logo">
-                        <span>NCO</span>
+                    <div className="logo-section" style={{ marginRight: '1rem' }}>
+                        <div className="logo-badge header-logo-badge">NCO</div>
                     </div>
                     <div>
                         <h1 className="header-title">NCO Search</h1>
-                        <p className="header-subtitle">AI-Enabled Semantic Search</p>
                     </div>
                 </Link>
 
@@ -71,7 +70,6 @@ export default function Header() {
                             className={getRoleButtonClass(ROLES.ENUMERATOR)}
                             title="Switch to Enumerator Mode"
                         >
-                            <span className="role-icon">📝</span>
                             <span className="role-name">Enumerator</span>
                         </button>
 
@@ -80,7 +78,6 @@ export default function Header() {
                             className={getRoleButtonClass(ROLES.PUBLIC)}
                             title="Switch to Public Demo Mode"
                         >
-                            <span className="role-icon">👁️</span>
                             <span className="role-name">Public Demo</span>
                         </button>
 
@@ -89,7 +86,6 @@ export default function Header() {
                             className={getRoleButtonClass(ROLES.ADMIN)}
                             title="Switch to Admin Mode"
                         >
-                            <span className="role-icon">⚙️</span>
                             <span className="role-name">Admin</span>
                         </button>
                     </div>
@@ -100,43 +96,85 @@ export default function Header() {
                     {/* Theme Toggle */}
                     <button
                         onClick={toggleTheme}
-                        className="btn-icon"
+                        className="theme-toggle-btn"
                         title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
                     >
-                        {theme === 'light' ? '🌙' : '☀️'}
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill={theme === 'dark' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
                     </button>
 
                     {/* Admin Dashboard Link */}
                     <RoleGuard roles={['ADMIN']}>
                         <Link to="/admin/dashboard" className="btn btn-primary">
-                            📊 Dashboard
+                            Dashboard
                         </Link>
                     </RoleGuard>
                 </div>
             </div>
 
-            {/* Admin Navigation - Only show on non-Get Started pages */}
-            {!isGetStartedPage && !location.pathname.startsWith('/demo') && (
-                <RoleGuard roles={['ADMIN']}>
-                    <nav className="admin-nav">
-                        <Link to="/admin/search" className="nav-link">
-                            <span className="nav-icon">🔍</span>
-                            Search
-                        </Link>
-                        <Link to="/admin/dashboard" className="nav-link">
-                            <span className="nav-icon">📊</span>
-                            Dashboard
-                        </Link>
-                        <Link to="/admin/synonyms" className="nav-link">
-                            <span className="nav-icon">📝</span>
-                            Synonyms
-                        </Link>
-                        <Link to="/admin/audit-logs" className="nav-link">
-                            <span className="nav-icon">📋</span>
-                            Audit Logs
-                        </Link>
-                    </nav>
-                </RoleGuard>
+            {/* Secondary Navigation - Only show on non-Get Started pages */}
+            {!isGetStartedPage && (
+                <div className="admin-nav">
+                    {/* Public Demo Navigation */}
+                    {currentRole === ROLES.PUBLIC && (
+                        <>
+                            <Link to="/demo" className="nav-link">
+                                Search
+                            </Link>
+                            <Link to="/about" className="nav-link">
+                                About Us
+                            </Link>
+                            <Link to="/how-it-works" className="nav-link">
+                                How It Works
+                            </Link>
+                        </>
+                    )}
+
+                    {/* Enumerator Navigation */}
+                    {currentRole === ROLES.ENUMERATOR && (
+                        <>
+                            <Link to="/enumerator" className="nav-link">
+                                Search
+                            </Link>
+                            <Link to="/saved-searches" className="nav-link">
+                                Saved Searches
+                            </Link>
+                            <Link to="/guidelines" className="nav-link">
+                                Guidelines / Help
+                            </Link>
+                            <Link to="/about" className="nav-link">
+                                About Us
+                            </Link>
+                        </>
+                    )}
+
+                    {/* Admin Navigation */}
+                    {currentRole === ROLES.ADMIN && (
+                        <>
+                            <Link to="/admin/search" className="nav-link">
+                                Search
+                            </Link>
+                            <Link to="/admin/synonyms" className="nav-link">
+                                Synonyms
+                            </Link>
+                            <Link to="/admin/audit-logs" className="nav-link">
+                                Audit Logs
+                            </Link>
+                            <Link to="/about" className="nav-link">
+                                About Us
+                            </Link>
+                        </>
+                    )}
+                </div>
             )}
         </header>
     );

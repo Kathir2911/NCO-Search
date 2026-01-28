@@ -133,7 +133,7 @@ export default function Synonyms() {
                                 className="btn btn-primary"
                                 disabled={adding}
                             >
-                                {adding ? 'Adding...' : '+ Add Synonym'}
+                                {adding ? 'Adding...' : 'Add Synonym'}
                             </button>
                         </div>
                     </form>
@@ -191,7 +191,7 @@ export default function Synonyms() {
                                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)'}
                                         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                                     >
-                                        🗑️ Remove
+                                        Remove
                                     </button>
                                 </div>
                             ))}

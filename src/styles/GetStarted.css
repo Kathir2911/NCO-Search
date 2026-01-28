@@ -20,24 +20,11 @@
     border-bottom: 2px solid var(--border-color);
 }
 
-.logo-section {
+/* Logo Section - Uses global index.css styles */
+.get-started-logo-wrapper {
     display: flex;
     justify-content: center;
     margin-bottom: 1.5rem;
-}
-
-.logo-badge {
-    width: 80px;
-    height: 80px;
-    background-color: #2563eb;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    font-size: 1.75rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .page-title {
@@ -59,10 +46,10 @@
 .section-title {
     font-size: 1.75rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--text-header);
     margin: 0 0 1.5rem 0;
     padding-bottom: 0.75rem;
-    border-bottom: 3px solid var(--primary-color);
+    border-bottom: 3px solid var(--accent-yellow);
     display: inline-block;
 }
 
@@ -306,18 +293,18 @@
     padding: 1.25rem 3rem;
     font-size: 1.25rem;
     font-weight: 600;
-    background-color: #2563eb;
+    background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-yellow) 100%);
     color: white;
     text-decoration: none;
-    border-radius: 12px;
+    border-radius: 8px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
 }
 
 .btn-get-started:hover {
-    background-color: #1d4ed8;
+    background: linear-gradient(135deg, var(--accent-yellow) 0%, var(--accent-orange) 100%);
     transform: translateY(-3px);
-    box-shadow: 0 8px 12px rgba(37, 99, 235, 0.4);
+    box-shadow: 0 8px 16px rgba(255, 165, 0, 0.4);
 }
 
 

@@ -26,12 +26,12 @@ export default function ResultCard({ result, onAction }) {
             await logSelection(result.ncoCode, result.title);
 
             // Show success message
-            alert(`✓ Selection successful!\n\nOccupation: ${result.title}\nNCO Code: ${result.ncoCode}`);
+            alert(`Selection successful!\n\nOccupation: ${result.title}\nNCO Code: ${result.ncoCode}`);
 
             // Notify parent component
             if (onAction) onAction('select', result);
         } catch (error) {
-            alert('❌ Selection failed. Please try again.');
+            alert('Selection failed. Please try again.');
             console.error('Selection error:', error);
         } finally {
             setIsSelecting(false);
@@ -55,12 +55,12 @@ export default function ResultCard({ result, onAction }) {
             await logOverride('AUTO_SELECTED', result.ncoCode);
 
             // Show success message
-            alert(`✓ Override successful!\n\nOccupation: ${result.title}\nNCO Code: ${result.ncoCode}`);
+            alert(`Override successful!\n\nOccupation: ${result.title}\nNCO Code: ${result.ncoCode}`);
 
             // Notify parent component
             if (onAction) onAction('override', result);
         } catch (error) {
-            alert('❌ Override failed. Please try again.');
+            alert('Override failed. Please try again.');
             console.error('Override error:', error);
         } finally {
             setIsOverriding(false);
@@ -118,7 +118,7 @@ export default function ResultCard({ result, onAction }) {
                         disabled={isSelecting}
                         className="btn btn-primary action-btn"
                     >
-                        {isSelecting ? '⏳ Selecting...' : '✓ Select'}
+                        {isSelecting ? 'Selecting...' : 'Select'}
                     </button>
                 )}
 
@@ -129,7 +129,7 @@ export default function ResultCard({ result, onAction }) {
                         disabled={isOverriding}
                         className="btn btn-purple action-btn"
                     >
-                        {isOverriding ? '⏳ Overriding...' : '⚡ Override'}
+                        {isOverriding ? 'Overriding...' : 'Override'}
                     </button>
                 )}
             </div>

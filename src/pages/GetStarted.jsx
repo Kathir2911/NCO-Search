@@ -12,8 +12,8 @@ export default function GetStarted() {
             <div className="get-started-container">
                 {/* Header Section */}
                 <header className="get-started-header">
-                    <div className="logo-section">
-                        <div className="logo-badge">NCO</div>
+                    <div className="get-started-logo-wrapper">
+                        <div className="logo-badge get-started-logo-badge">NCO</div>
                     </div>
                     <h1 className="page-title">NCO Semantic Occupation Search System</h1>
                     <p className="page-subtitle">AI-Enabled Semantic Search for National Classification of Occupations</p>

@@ -12,6 +12,10 @@ import AuditLogs from './pages/admin/AuditLogs';
 import RoleGuard from './components/RoleGuard';
 import DemoSearch from './pages/demo/DemoSearch';
 import DemoDetail from './pages/demo/DemoDetail';
+import AboutUs from './pages/AboutUs';
+import Guidelines from './pages/Guidelines';
+import SavedSearches from './pages/SavedSearches';
+import HowItWorks from './pages/HowItWorks';
 import BackToTop from './components/BackToTop';
 
 function App() {
@@ -28,6 +32,14 @@ function App() {
 
               {/* Login Page */}
               <Route path="/login" element={<Login />} />
+
+              {/* About Us Page */}
+              <Route path="/about" element={<AboutUs />} />
+
+              {/* Informational Pages */}
+              <Route path="/guidelines" element={<Guidelines />} />
+              <Route path="/saved-searches" element={<SavedSearches />} />
+              <Route path="/how-it-works" element={<HowItWorks />} />
 
               {/* Public Demo Routes */}
               <Route path="/demo" element={<DemoSearch />} />
