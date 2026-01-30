@@ -9,20 +9,26 @@ lerna-debug.log*
 
 # Environment variables
 .env
+.env.local
 .env.*.local
+**/.env
+**/.env.local
+**/.env.*.local
 
-node_modules
-dist
-dist-ssr
-*.local
+# Dependency directories
+node_modules/
+**/node_modules/
 
-# Build caches
-.vite
-.turbo
+# Build outputs
+dist/
+dist-ssr/
+build/
+.vite/
+.turbo/
 
 # Testing
-coverage
-.nyc_output
+coverage/
+.nyc_output/
 
 # Tooling
 .eslintcache
@@ -30,8 +36,9 @@ coverage
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
