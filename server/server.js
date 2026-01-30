@@ -91,53 +91,33 @@ app.use((req, res) => {
 
 // Start server
 const startServer = async () => {
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('🚀 Starting NCO Search Backend Server...');
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-
-    // 1. Connect to MongoDB FIRST
-    await connectDB();
-
-    // 2. Start listening SECOND
-    app.listen(PORT, async () => {
-        const twilioConfigured = isTwilioConfigured();
-
-        console.log(`📡 Server running on: http://localhost:${PORT}`);
-        console.log(`🌐 Frontend URL: ${FRONTEND_URL}`);
-        console.log(`🔐 Environment: ${process.env.NODE_ENV || 'development'}`);
+    // Only log and connect if not in serverless environment (optional but good for logs)
+    if (process.env.NODE_ENV !== 'test') {
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        console.log('Available endpoints:');
-        console.log('  GET  /health');
-        console.log('  POST /api/auth/request-otp');
-        console.log('  POST /api/auth/verify-otp');
-        console.log('  POST /api/auth/logout');
+        console.log('🚀 Starting NCO Search Backend Server...');
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        await connectDB();
+    }
 
-        // Check Twilio configuration
-        if (!twilioConfigured) {
-            console.log('');
-            console.warn('⚠️  WARNING: Twilio NOT Configured!');
-            console.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-            console.warn('📝 To enable OTP functionality:');
-            console.warn('   1. Copy .env.example to .env');
-            console.warn('   2. Sign up at https://www.twilio.com/try-twilio');
-            console.warn('   3. Add your credentials to .env file');
-            console.warn('   4. Restart this server');
-            console.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-            console.log('');
-        } else {
-            console.log('✅ Twilio is configured and ready!');
-        }
+    // Only call listen if we're not running as a Vercel function
+    if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+        app.listen(PORT, () => {
+            const twilioConfigured = isTwilioConfigured();
+            console.log(`📡 Server running on: http://localhost:${PORT}`);
+            console.log(`🌐 Frontend URL: ${FRONTEND_URL}`);
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
-        // Check database connection status
-        if (isDBConnected()) {
-            console.log('✅ MongoDB is connected and ready!');
-        } else {
-            console.warn('⚠️  MongoDB not connected - using fallback mode');
-            console.warn('   Only test numbers 9876543210 and 8248805628 will work');
-        }
-        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    });
+            if (isDBConnected()) {
+                console.log('✅ MongoDB is connected and ready!');
+            }
+            if (twilioConfigured) {
+                console.log('✅ Twilio is configured and ready!');
+            }
+        });
+    } else {
+        // Enforce DB connection for Vercel cold starts
+        connectDB();
+    }
 };
 
 startServer();

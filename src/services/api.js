@@ -139,9 +139,9 @@ export async function requestOTP(phone) {
         console.log('✅ OTP sent successfully');
         return response.data;
     } catch (error) {
-        const message = error.response?.data?.error || 'Failed to send OTP. Please try again.';
+        const message = error.response?.data?.error || error.message || 'Failed to send OTP. Please try again.';
         console.error('❌ OTP Request Error:', message);
-        throw new Error(message);
+        throw new Error(typeof message === 'object' ? JSON.stringify(message) : message);
     }
 }
 
@@ -151,9 +151,9 @@ export async function verifyOTP(phone, otp) {
         console.log('✅ OTP verified successfully');
         return response.data.user; // Returns { phone, role, name, token }
     } catch (error) {
-        const message = error.response?.data?.error || 'OTP verification failed. Please try again.';
+        const message = error.response?.data?.error || error.message || 'OTP verification failed. Please try again.';
         console.error('❌ OTP Verification Error:', message);
-        throw new Error(message);
+        throw new Error(typeof message === 'object' ? JSON.stringify(message) : message);
     }
 }
 
