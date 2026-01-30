@@ -42,6 +42,24 @@ app.use((req, res, next) => {
     next();
 });
 
+// Database connection middleware for Vercel
+app.use(async (req, res, next) => {
+    if (!isDBConnected() && !req.url.includes('/health')) {
+        try {
+            await connectDB();
+            next();
+        } catch (error) {
+            console.error('Database connection error in middleware:', error);
+            res.status(500).json({
+                error: 'Database connection failed',
+                message: error.message
+            });
+        }
+    } else {
+        next();
+    }
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
