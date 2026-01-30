@@ -29,7 +29,7 @@ export default function Users() {
             setUsers(enumerators);
         } catch (err) {
             console.error('Failed to load users:', err);
-            setError('Could not connect to database. Please check if backend is running.');
+            setError(`Connection Error: ${err.message}`);
         } finally {
             setLoading(false);
         }

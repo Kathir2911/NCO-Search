@@ -153,8 +153,9 @@ export async function getUsers() {
         const response = await axios.get(`${BACKEND_URL}/api/users`);
         return response.data;
     } catch (error) {
-        console.error('Failed to fetch users:', error);
-        return [];
+        const message = error.response?.data?.error || error.message || 'Failed to fetch users';
+        console.error('Failed to fetch users:', message);
+        throw new Error(message);
     }
 }
 
