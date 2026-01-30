@@ -18,7 +18,8 @@ let localSynonyms = [...mockSynonyms];
 let localAuditLogs = [...mockAuditLogs];
 
 // Backend API URL for authentication
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
+// Backend API URL for authentication - empty string means use relative paths (perfect for Vercel/proxies)
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 
 /**
  * Search for occupations based on query
