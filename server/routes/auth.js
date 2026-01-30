@@ -49,7 +49,7 @@ router.post('/request-otp', otpRateLimiter, async (req, res) => {
         const otp = generateOTP();
 
         // Store OTP
-        storeOTP(phone, otp);
+        await storeOTP(phone, otp);
 
         // Send OTP via Twilio
         await sendOTP(phone, otp);
@@ -62,9 +62,14 @@ router.post('/request-otp', otpRateLimiter, async (req, res) => {
         });
 
     } catch (error) {
-        console.error('❌ Error in request-otp:', error.message);
-        return res.status(error.status || 500).json({
-            error: error.message || 'Failed to send OTP. Please try again.'
+        console.error('❌ Error in request-otp:', error.stack || error.message);
+
+        // Ensure we send a response instead of letting the connection hang or crash
+        const statusCode = error.name === 'Error' ? 400 : (error.status || 500);
+
+        return res.status(statusCode).json({
+            success: false,
+            error: error.message || 'Failed to send OTP. Please check your Twilio configuration.'
         });
     }
 });
@@ -83,7 +88,7 @@ router.post('/verify-otp', async (req, res) => {
         }
 
         // Verify OTP
-        const verification = verifyOTP(phone, otp);
+        const verification = await verifyOTP(phone, otp);
 
         if (!verification.valid) {
             return res.status(400).json({ error: verification.message });

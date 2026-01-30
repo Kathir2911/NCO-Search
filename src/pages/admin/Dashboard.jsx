@@ -74,6 +74,17 @@ export default function Dashboard() {
                         </div>
                         <div className="stat-icon"></div>
                     </div>
+
+                    {/* Total Enumerators */}
+                    <div className="card stat-card">
+                        <div>
+                            <p className="stat-label">Total Enumerators</p>
+                            <p className="stat-value" style={{ color: '#6366f1' }}>
+                                {analytics?.totalEnumerators?.toLocaleString() || '24'}
+                            </p>
+                        </div>
+                        <div className="stat-icon"></div>
+                    </div>
                 </div>
 
                 {/* Top Occupations */}
@@ -147,6 +158,25 @@ export default function Dashboard() {
                                 </h3>
                                 <p className="text-sm text-gray-600">
                                     Review system activity and user interactions
+                                </p>
+                            </div>
+                        </div>
+                    </Link>
+
+                    <Link
+                        to="/admin/users"
+                        className="card"
+                        style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', transition: 'box-shadow 0.2s' }}
+                        onMouseEnter={(e) => e.currentTarget.style.boxShadow = 'var(--shadow-lg)'}
+                        onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'var(--shadow-md)'}
+                    >
+                        <div className="flex items-center gap-4">
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-900">
+                                    Manage Enumerators
+                                </h3>
+                                <p className="text-sm text-gray-600">
+                                    Register new enumerators and manage their access
                                 </p>
                             </div>
                         </div>

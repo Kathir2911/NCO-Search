@@ -200,6 +200,7 @@ export const mockAnalytics = {
     totalSearches: 1247,
     averageConfidence: 0.87,
     lowConfidenceCases: 89,
+    totalEnumerators: 24,
     topOccupations: [
         { ncoCode: '75320101', title: 'Sewing Machine Operator (Garment)', count: 234 },
         { ncoCode: '25120101', title: 'Software Developer', count: 189 },

@@ -188,6 +188,9 @@ export default function Header() {
                                     <Link to="/admin/audit-logs" className="nav-link">
                                         Audit Logs
                                     </Link>
+                                    <Link to="/admin/users" className="nav-link">
+                                        Manage Enumerators
+                                    </Link>
                                 </>
                             )}
                             <Link to="/about" className="nav-link">

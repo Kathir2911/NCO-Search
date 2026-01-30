@@ -9,6 +9,7 @@ import OccupationDetail from './pages/OccupationDetail';
 import Dashboard from './pages/admin/Dashboard';
 import Synonyms from './pages/admin/Synonyms';
 import AuditLogs from './pages/admin/AuditLogs';
+import Users from './pages/admin/Users';
 import ProtectedRoute from './components/ProtectedRoute';
 import DemoSearch from './pages/demo/DemoSearch';
 import DemoDetail from './pages/demo/DemoDetail';
@@ -87,6 +88,14 @@ function App() {
                 element={
                   <ProtectedRoute roles={['ADMIN']}>
                     <AuditLogs />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/users"
+                element={
+                  <ProtectedRoute roles={['ADMIN']}>
+                    <Users />
                   </ProtectedRoute>
                 }
               />

@@ -145,6 +145,56 @@ export async function requestOTP(phone) {
     }
 }
 
+/**
+ * Get all registered users (Admins only)
+ */
+export async function getUsers() {
+    try {
+        const response = await axios.get(`${BACKEND_URL}/api/users`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch users:', error);
+        return [];
+    }
+}
+
+/**
+ * Register a new user/enumerator
+ */
+export async function registerUser(userData) {
+    try {
+        const response = await axios.post(`${BACKEND_URL}/api/users`, userData);
+        return response.data;
+    } catch (error) {
+        const message = error.response?.data?.error || 'Failed to register user';
+        throw new Error(message);
+    }
+}
+
+/**
+ * Delete an enumerator
+ */
+export async function deleteUser(phone) {
+    try {
+        const response = await axios.get(`${BACKEND_URL}/api/users/delete/${phone}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.error || 'Failed to delete user');
+    }
+}
+
+/**
+ * Toggle user active/inactive status
+ */
+export async function toggleUserStatus(phone) {
+    try {
+        const response = await axios.post(`${BACKEND_URL}/api/users/toggle-status/${phone}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.error || 'Failed to update user status');
+    }
+}
+
 export async function verifyOTP(phone, otp) {
     try {
         const response = await axios.post(`${BACKEND_URL}/api/auth/verify-otp`, { phone, otp });

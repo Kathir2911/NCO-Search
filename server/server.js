@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
+import userRoutes from './routes/userRoutes.js';
 import { apiRateLimiter } from './middleware/rateLimiter.js';
 import { isTwilioConfigured } from './config/twilio.js';
 import { connectDB, isDBConnected } from './config/database.js';
@@ -49,6 +50,7 @@ app.use('/api', apiRateLimiter);
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -90,6 +92,11 @@ connectDB();
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
     app.listen(PORT, () => {
         console.log(`📡 Server running on: http://localhost:${PORT}`);
+        if (isTwilioConfigured()) {
+            console.log('✅ Twilio is configured and ready!');
+        } else {
+            console.warn('⚠️  Twilio is NOT configured (Check your .env file)');
+        }
     });
 }
 
