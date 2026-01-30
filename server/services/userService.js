@@ -8,17 +8,7 @@ import { isDBConnected } from '../config/database.js';
  */
 export async function findUserByPhone(phone) {
     if (!isDBConnected()) {
-        console.warn('⚠️  MongoDB not connected, falling back to mock user');
-        // Fallback: Allow specific test numbers
-        if (phone === '9876543210' || phone === '8248805628') {
-            return {
-                phone: phone,
-                role: 'ENUMERATOR',
-                name: phone === '8248805628' ? 'User (Verified)' : 'Test Enumerator',
-                isActive: true
-            };
-        }
-        return null;
+        throw new Error('Database not connected. Please check server logs.');
     }
 
     try {
@@ -26,7 +16,7 @@ export async function findUserByPhone(phone) {
         return user;
     } catch (error) {
         console.error('Error finding user:', error);
-        return null;
+        throw error;
     }
 }
 
@@ -74,13 +64,13 @@ export async function updateLastLogin(phone) {
  */
 export async function getAllUsers() {
     if (!isDBConnected()) {
-        return [];
+        throw new Error('Database not connected. Please check if MONGODB_URI is set in Vercel.');
     }
 
     try {
         return await User.find({ isActive: true }).select('-__v');
     } catch (error) {
         console.error('Error fetching users:', error);
-        return [];
+        throw error;
     }
 }
