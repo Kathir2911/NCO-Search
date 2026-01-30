@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getSynonyms, addSynonym, removeSynonym } from '../../services/api';
+import { getSynonyms, addSynonym, deleteSynonym } from '../../services/api';
 import LoadingState from '../../components/LoadingState';
 
 export default function Synonyms() {
@@ -37,7 +37,11 @@ export default function Synonyms() {
 
         setAdding(true);
         try {
-            await addSynonym(newSynonym.synonym, newSynonym.ncoCode, newSynonym.occupation);
+            await addSynonym({
+                term: newSynonym.synonym,
+                ncoCode: newSynonym.ncoCode,
+                addedBy: 'System Admin'
+            });
             setNewSynonym({ synonym: '', ncoCode: '', occupation: '' });
             await loadSynonyms();
         } catch (error) {
@@ -54,7 +58,7 @@ export default function Synonyms() {
         }
 
         try {
-            await removeSynonym(synonymId);
+            await deleteSynonym(synonymId);
             await loadSynonyms();
         } catch (error) {
             console.error('Failed to remove synonym:', error);

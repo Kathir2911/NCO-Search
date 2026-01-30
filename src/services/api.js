@@ -1,4 +1,5 @@
 import { mockSearchResults, mockOccupations, mockSynonyms, mockAuditLogs, mockAnalytics } from './mockData';
+import axios from 'axios';
 
 // Simulate API delay for realistic behavior
 const delay = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms));
@@ -7,12 +8,7 @@ const delay = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms));
  * API Service Layer
  * 
  * This service abstracts all backend interactions.
- * Currently uses mock data, but can be easily replaced with real API calls.
- * 
- * To replace with real backend:
- * 1. Update the base URL
- * 2. Replace mock returns with actual HTTP calls (using axios or fetch)
- * 3. Handle authentication tokens if needed
+ * Currently uses mock data for search features, real backend for authentication.
  */
 
 const API_BASE_URL = '/api'; // This would be your actual backend URL
@@ -20,6 +16,9 @@ const API_BASE_URL = '/api'; // This would be your actual backend URL
 // In-memory storage for frontend-only features
 let localSynonyms = [...mockSynonyms];
 let localAuditLogs = [...mockAuditLogs];
+
+// Backend API URL for authentication
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
 
 /**
  * Search for occupations based on query
@@ -49,202 +48,167 @@ export async function searchOccupations(query) {
  */
 export async function getOccupationDetails(ncoCode) {
     await delay();
-
-    // Mock implementation
     const occupation = mockOccupations.find(occ => occ.ncoCode === ncoCode);
-
     if (!occupation) {
         throw new Error('Occupation not found');
     }
 
-    return occupation;
+    addAuditLog('VIEW_DETAIL', `Viewed details for: ${occupation.title} (${ncoCode})`);
 
-    // Real implementation would be:
-    // const response = await axios.get(`${API_BASE_URL}/occupations/${ncoCode}`);
-    // return response.data;
+    return occupation;
 }
 
 /**
- * Get all synonym mappings
- * @returns {Promise<Array>} - Array of synonym objects
+ * Get all synonyms/mappings
+ * @returns {Promise<Array>} - List of all synonym mappings
  */
 export async function getSynonyms() {
     await delay(300);
-
-    // Mock implementation - returns local state
-    return [...localSynonyms];
-
-    // Real implementation would be:
-    // const response = await axios.get(`${API_BASE_URL}/synonyms`);
-    // return response.data;
+    return localSynonyms;
 }
 
 /**
  * Add a new synonym mapping
- * @param {string} synonym - The synonym text
- * @param {string} ncoCode - Target NCO code
- * @param {string} occupation - Occupation title
- * @returns {Promise<Object>} - Created synonym object
+ * @param {Object} synonym - { term, ncoCode, addedBy }
+ * @returns {Promise<Object>} - Created synonym
  */
-export async function addSynonym(synonym, ncoCode, occupation) {
-    await delay(300);
-
-    // Mock implementation - update local state
+export async function addSynonym(synonym) {
+    await delay(400);
     const newSynonym = {
         id: Date.now(),
-        synonym,
-        ncoCode,
-        occupation,
+        ...synonym,
+        dateAdded: new Date().toISOString(),
     };
-
     localSynonyms.push(newSynonym);
-    addAuditLog('SYNONYM_ADD', `Added synonym: "${synonym}" → ${ncoCode} (${occupation})`);
+
+    addAuditLog('ADD_SYNONYM', `Added synonym: "${synonym.term}" → ${synonym.ncoCode}`);
 
     return newSynonym;
-
-    // Real implementation would be:
-    // const response = await axios.post(`${API_BASE_URL}/synonyms`, { synonym, ncoCode, occupation });
-    // return response.data;
 }
 
 /**
- * Remove a synonym mapping
- * @param {number} synonymId - ID of synonym to remove
- * @returns {Promise<void>}
+ * Delete a synonym mapping
+ * @param {number} synonymId - ID of the synonym to delete
+ * @returns {Promise<boolean>} - Success status
  */
-export async function removeSynonym(synonymId) {
+export async function deleteSynonym(synonymId) {
     await delay(300);
+    const index = localSynonyms.findIndex(s => s.id === synonymId);
+    if (index !== -1) {
+        const deleted = localSynonyms[index];
+        localSynonyms.splice(index, 1);
 
-    // Mock implementation - update local state
-    const synonym = localSynonyms.find(s => s.id === synonymId);
-    localSynonyms = localSynonyms.filter(s => s.id !== synonymId);
+        addAuditLog('DELETE_SYNONYM', `Deleted synonym: "${deleted.term}"`);
 
-    if (synonym) {
-        addAuditLog('SYNONYM_REMOVE', `Removed synonym: "${synonym.synonym}"`);
+        return true;
     }
-
-    // Real implementation would be:
-    // await axios.delete(`${API_BASE_URL}/synonyms/${synonymId}`);
-}
-
-/**
- * Get audit logs
- * @param {string} filter - Optional filter by action type
- * @returns {Promise<Array>} - Array of audit log entries
- */
-export async function getAuditLogs(filter = null) {
-    await delay(300);
-
-    // Mock implementation
-    let logs = [...localAuditLogs].reverse(); // Most recent first
-
-    if (filter && filter !== 'ALL') {
-        logs = logs.filter(log => log.action === filter);
-    }
-
-    return logs;
-
-    // Real implementation would be:
-    // const response = await axios.get(`${API_BASE_URL}/audit-logs`, { params: { filter } });
-    // return response.data;
+    return false;
 }
 
 /**
  * Get analytics data
- * @returns {Promise<Object>} - Analytics object with various metrics
+ * @returns {Promise<Object>} - Analytics data
  */
 export async function getAnalytics() {
-    await delay(400);
-
-    // Mock implementation
-    return { ...mockAnalytics };
-
-    // Real implementation would be:
-    // const response = await axios.get(`${API_BASE_URL}/analytics`);
-    // return response.data;
+    await delay(500);
+    return mockAnalytics;
 }
 
 /**
- * Log a selection (called when enumerator selects an occupation)
- * @param {string} ncoCode - Selected occupation code
- * @param {string} title - Selected occupation title
- * @returns {Promise<void>}
+ * Get audit logs
+ * @returns {Promise<Array>} - Audit log entries
  */
-export async function logSelection(ncoCode, title) {
-    await delay(200);
-
-    addAuditLog('SELECTION', `Selected occupation: ${ncoCode} - ${title}`);
-
-    // Real implementation would be:
-    // await axios.post(`${API_BASE_URL}/selections`, { ncoCode, title });
+export async function getAuditLogs() {
+    await delay(300);
+    return [...localAuditLogs].reverse(); // Most recent first
 }
 
 /**
- * Log an override (called when admin overrides a selection)
- * @param {string} fromCode - Original occupation code
- * @param {string} toCode - Override occupation code
- * @returns {Promise<void>}
+ * ===================================================
+ * AUTHENTICATION SERVICES
+ * ===================================================
  */
-export async function logOverride(fromCode, toCode) {
-    await delay(200);
-
-    addAuditLog('OVERRIDE', `Override: Changed from ${fromCode} to ${toCode}`);
-
-    // Real implementation would be:
-    // await axios.post(`${API_BASE_URL}/overrides`, { fromCode, toCode });
-}
 
 /**
- * Authentication Services
+ * Enumerator Authentication - OTP via Twilio
  */
-
-// Mock database for users
-const mockUsers = {
-    enumerator: { phone: '9876543210', role: 'ENUMERATOR', name: 'Field Agent 1' },
-    admin: { username: 'admin', password: 'password', role: 'ADMIN', name: 'System Admin' }
-};
-
 export async function requestOTP(phone) {
-    await delay(1000);
-    console.log(`[Twilio Mock] Sending OTP to ${phone}: 123456`);
-    return true; // Always return success in mock
+    try {
+        const response = await axios.post(`${BACKEND_URL}/api/auth/request-otp`, { phone });
+        console.log('✅ OTP sent successfully');
+        return response.data;
+    } catch (error) {
+        const message = error.response?.data?.error || 'Failed to send OTP. Please try again.';
+        console.error('❌ OTP Request Error:', message);
+        throw new Error(message);
+    }
 }
 
 export async function verifyOTP(phone, otp) {
+    try {
+        const response = await axios.post(`${BACKEND_URL}/api/auth/verify-otp`, { phone, otp });
+        console.log('✅ OTP verified successfully');
+        return response.data.user; // Returns { phone, role, name, token }
+    } catch (error) {
+        const message = error.response?.data?.error || 'OTP verification failed. Please try again.';
+        console.error('❌ OTP Verification Error:', message);
+        throw new Error(message);
+    }
+}
+
+/**
+ * Admin Authentication - Mock for now
+ */
+export async function loginAdmin(email, password) {
     await delay(800);
-    if (otp === '123456') {
-        const user = Object.values(mockUsers).find(u => u.phone === phone) || {
-            phone,
-            role: 'ENUMERATOR',
-            name: 'New Enumerator'
+    // Mock admin login
+    if (email === 'admin@nco.gov.in' && password === 'admin123') {
+        const adminUser = {
+            id: 'admin_01',
+            email,
+            role: 'ADMIN',
+            name: 'System Admin',
+            token: 'mock-admin-token-' + Date.now()
         };
-        return { ...user, token: 'mock-jwt-token-enumerator' };
+        return adminUser;
+    }
+    throw new Error('Invalid admin credentials');
+}
+
+export async function verifyAdminOTP(email, otp) {
+    await delay(800);
+    // Mock admin OTP verification
+    if (otp === '123456') {
+        const adminUser = {
+            id: 'admin_01',
+            email,
+            role: 'ADMIN',
+            name: 'System Admin',
+            token: 'mock-admin-token-' + Date.now()
+        };
+        return adminUser;
     }
     throw new Error('Invalid OTP');
 }
 
-export async function loginAdmin(username, password) {
-    await delay(800);
-    const user = mockUsers[username];
-    if (user && user.password === password) {
-        console.log(`[MFA Mock] Verification code for ${username}: 654321`);
-        return true; // Move to MFA step
-    }
-    throw new Error('Invalid credentials');
-}
-
-export async function verifyAdminOTP(username, otp) {
-    await delay(800);
-    if (otp === '654321') {
-        const user = mockUsers[username];
-        const { password, ...userWithoutPassword } = user;
-        return { ...userWithoutPassword, token: 'mock-jwt-token-admin' };
-    }
-    throw new Error('Invalid verification code');
-}
-
 export async function logout() {
     await delay(300);
+    return true;
+}
+
+/**
+ * Log selection of an occupation
+ */
+export async function logSelection(ncoCode, title) {
+    addAuditLog('SELECTION', `Selected occupation: ${ncoCode} - ${title}`);
+    return true;
+}
+
+/**
+ * Log admin override action
+ */
+export async function logOverride(fromCode, toCode, reason) {
+    addAuditLog('OVERRIDE', `Override: Changed from ${fromCode} to ${toCode}. Reason: ${reason}`);
     return true;
 }
 

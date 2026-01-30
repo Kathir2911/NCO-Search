@@ -120,9 +120,6 @@ export default function Login() {
                                     onChange={(e) => setPhone(e.target.value)}
                                     required
                                 />
-                                <p className="text-sm mt-2" style={{ color: 'var(--text-tertiary)' }}>
-                                    We will send a one-time password (OTP) to this number via Twilio.
-                                </p>
                             </div>
                         ) : (
                             <>
