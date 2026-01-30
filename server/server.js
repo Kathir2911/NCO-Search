@@ -23,11 +23,14 @@ app.use(cors({
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-            return callback(new Error(msg), false);
+
+        // Allow any Vercel deployment URL
+        if (origin.endsWith('.vercel.app') || allowedOrigins.indexOf(origin) !== -1) {
+            return callback(null, true);
         }
-        return callback(null, true);
+
+        const msg = `CORS Error: Origin ${origin} not allowed.`;
+        return callback(new Error(msg), false);
     },
     credentials: true
 }));
@@ -35,9 +38,6 @@ app.use(cors({
 // Request logger
 app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-    if (req.method === 'POST') {
-        console.log('Body:', JSON.stringify(req.body, null, 2));
-    }
     next();
 });
 
@@ -65,13 +65,7 @@ app.get('/health', (req, res) => {
 app.get('/', (req, res) => {
     res.json({
         message: 'NCO Search Backend API',
-        version: '1.0.0',
-        endpoints: {
-            health: '/health',
-            requestOTP: 'POST /api/auth/request-otp',
-            verifyOTP: 'POST /api/auth/verify-otp',
-            logout: 'POST /api/auth/logout'
-        }
+        version: '1.0.0'
     });
 });
 
@@ -80,7 +74,7 @@ app.use((err, req, res, next) => {
     console.error('Server Error:', err);
     res.status(500).json({
         error: 'Internal server error',
-        message: process.env.NODE_ENV === 'development' ? err.message : undefined
+        message: err.message // Temporarily enabled for production debugging
     });
 });
 
@@ -89,37 +83,14 @@ app.use((req, res) => {
     res.status(404).json({ error: 'Endpoint not found' });
 });
 
-// Start server
-const startServer = async () => {
-    // Only log and connect if not in serverless environment (optional but good for logs)
-    if (process.env.NODE_ENV !== 'test') {
-        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        console.log('🚀 Starting NCO Search Backend Server...');
-        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        await connectDB();
-    }
+// Connect to Database immediately
+connectDB();
 
-    // Only call listen if we're not running as a Vercel function
-    if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
-        app.listen(PORT, () => {
-            const twilioConfigured = isTwilioConfigured();
-            console.log(`📡 Server running on: http://localhost:${PORT}`);
-            console.log(`🌐 Frontend URL: ${FRONTEND_URL}`);
-            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-
-            if (isDBConnected()) {
-                console.log('✅ MongoDB is connected and ready!');
-            }
-            if (twilioConfigured) {
-                console.log('✅ Twilio is configured and ready!');
-            }
-        });
-    } else {
-        // Enforce DB connection for Vercel cold starts
-        connectDB();
-    }
-};
-
-startServer();
+// Only call listen if we're not running as a Vercel function
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`📡 Server running on: http://localhost:${PORT}`);
+    });
+}
 
 export default app;
